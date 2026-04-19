@@ -1,0 +1,66 @@
+{
+  "_comment": "OpenClaw Configuration Template. Copy to ~/.openclaw/openclaw.json and customize. Remove this _comment field.",
+  "_docs": "See https://openclaw.dev/docs/config for full reference",
+
+  "model": "anthropic/claude-opus-4-6",
+
+  "models": {
+    "allowlist": [
+      "anthropic/claude-opus-4-6",
+      "anthropic/claude-sonnet-4-5",
+      "openrouter/qwen/qwen3-235b-a22b",
+      "openrouter/qwen/qwen3-30b-a3b",
+      "openrouter/minimax/minimax-m1"
+    ],
+    "defaults": {
+      "subagent": "anthropic/claude-sonnet-4-5"
+    }
+  },
+
+  "gateway": {
+    "mode": "local",
+    "port": 18789,
+    "bind": "127.0.0.1",
+    "auth": "token"
+  },
+
+  "channels": {
+  },
+
+  "tools": {
+    "profile": "coding",
+    "exec": {
+      "security": "full"
+    }
+  },
+
+  "workspace": {
+    "path": "/home/openclaw/.openclaw/workspace"
+  },
+
+  "agents": {
+    "defaults": {
+      "model": "anthropic/claude-sonnet-4-5"
+    }
+  },
+
+  "heartbeat": {
+    "enabled": true,
+    "intervalMinutes": 55,
+    "model": "anthropic/claude-sonnet-4-5",
+    "isolated": true
+  },
+
+  "compaction": {
+    "mode": "safeguard",
+    "model": "anthropic/claude-sonnet-4-5"
+  },
+
+  "context": {
+    "pruning": {
+      "strategy": "cache-ttl",
+      "ttlSeconds": 3600,
+      "keepLastAssistants": 3
+    }
+  }
+}

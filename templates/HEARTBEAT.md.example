@@ -1,0 +1,65 @@
+# HEARTBEAT.md — Periodic Health Check
+
+This file defines what the agent does during scheduled heartbeat runs.
+Heartbeats are lightweight background tasks — keep them fast and cheap.
+
+## Configuration
+
+Heartbeat is configured in `openclaw.json`:
+```json
+"heartbeat": {
+  "enabled": true,
+  "intervalMinutes": 55,
+  "model": "anthropic/claude-sonnet-4-5",
+  "isolated": true
+}
+```
+
+- **intervalMinutes**: How often to run (55 = avoids top-of-hour conflicts)
+- **model**: Use a cheaper model (Sonnet, not Opus) for cost efficiency
+- **isolated**: Run in a separate session so heartbeat doesn't pollute main context
+
+## What to Check Each Heartbeat
+
+### System Health
+- [ ] Disk space (warn if >80% full): `df -h /`
+- [ ] Memory pressure: `free -h`
+- [ ] Any failed systemd services: `systemctl --failed`
+- [ ] Uptime and load average: `uptime`
+
+### OpenClaw Health
+- [ ] Gateway is responding: `curl -s http://127.0.0.1:18789/health`
+- [ ] Recent error logs (last hour): `journalctl --user -u openclaw-gateway --since "1 hour ago"`
+- [ ] Active sessions count
+
+### Optional: External Checks
+- [ ] Check any watched URLs or APIs
+- [ ] Check for new relevant news/events
+- [ ] Trigger any scheduled reports
+
+## Escalation Rules
+
+Only message the user if something actionable is found:
+- Disk >85%: warn immediately
+- Gateway down: alert and attempt restart
+- Failed services: report with details
+- Otherwise: stay silent (no noise)
+
+## Example Heartbeat Prompt
+
+When the heartbeat runs, the agent will use this file as context.
+You can add a custom prompt here:
+
+```
+During this heartbeat:
+1. Check system health (disk, memory, services)
+2. Verify OpenClaw gateway is healthy
+3. Check for any pending tasks in MEMORY.md
+4. Only send a message if something needs attention
+5. Log results to memory/YYYY-MM-DD.md
+```
+
+---
+
+**Keep heartbeats cheap:** Use a small model, do minimal work, only speak when needed.
+Noisy heartbeats that message every run are annoying. Silent ones that only alert on problems are gold.

@@ -1,0 +1,49 @@
+# USER.md — About [Your Name]
+
+- **Name:** [Your Name]
+- **Timezone:** [e.g., US Pacific, UTC+8, Europe/London]
+- **Channel:** [e.g., Telegram, Discord]
+- **First session:** [YYYY-MM-DD]
+
+## Background
+
+[Brief professional background — helps the agent understand your context and speak your language]
+
+Examples:
+- Software engineer at [company], specializing in [domain]
+- Freelancer focusing on [type of work]
+- [Domain] professional exploring AI tooling
+
+## Goals
+
+[What you're trying to achieve — the agent uses this to prioritize and make judgment calls]
+
+Examples:
+- Build automated income streams alongside day job
+- Reduce time spent on repetitive tasks
+- Learn [skill] faster with AI assistance
+- Ship [project] by [date]
+
+## Context
+
+[Useful background the agent should always know]
+
+Examples:
+- Available to review work in [time window]
+- Prefer [communication style] — brief summaries or detailed explanations?
+- Tools/languages I use: [list]
+- Current projects: [list]
+- Things I don't want the agent to touch: [list]
+
+## Communication Preferences
+
+- [Formal/casual tone preference]
+- [How you like updates delivered]
+- [How often you want proactive check-ins vs. quiet operation]
+
+---
+
+**Tips:**
+- Update this file when your goals or context change significantly
+- The more context here, the better the agent can prioritize without asking
+- This file is loaded every session — keep it current, not historical

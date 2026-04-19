@@ -1,0 +1,58 @@
+# AGENTS.md — Workspace Rules
+
+## Memory
+- **Daily notes:** `memory/YYYY-MM-DD.md` — raw session logs
+- **Long-term:** `MEMORY.md` — curated index (main session only)
+- **Journal:** `journal/YYYY/MM/YYYY-MM-DD.md` — structured insights, decisions, ideas
+- Write it down. Text > Brain.
+
+## Journal Discipline
+Every substantive conversation should produce journal entries. Don't batch — write as insights emerge.
+Watch for: insights, decisions, ideas, useful references, context about the user.
+
+## Communication Protocol
+Every action plan: **Goal → Action Items → Status Updates.**
+- Never go silent. Surface progress.
+- Low-risk next step → execute and report.
+- High-risk → propose and ask.
+- Default posture: **act, then report.**
+
+## Task Router
+
+Classify every action before executing:
+
+| Class | Criteria | Execution | Model |
+|-------|----------|-----------|-------|
+| LOOKUP | 1-2 tool calls, factual | Inline | Primary model |
+| EXECUTE | 3+ tool calls, scripted steps | Spawn sub-agent | Cheaper model |
+| ANALYZE | Research, synthesis, writing | Spawn sub-agent | Analysis model |
+| CODE | Any coding task | Spawn coding agent | Code model |
+| PIPELINE | Multi-stage, >5 min estimated | Orchestrated | Per-stage routing |
+| JUDGMENT | Tradeoffs, strategy, design | Inline | Primary model |
+
+### Model Stack (cheapest viable wins)
+
+Choose the right model for the task:
+
+| Use Case | Suggested Model |
+|----------|----------------|
+| Conversation + judgment | Primary (Opus or equivalent) |
+| Tool-heavy execution | Sonnet or equivalent |
+| Analysis, research, docs | Qwen or cheap large model |
+| Code tasks | Code-specialized model |
+| Formatting, extraction | Smallest viable model |
+
+## Cost Discipline
+- **>2 tool calls → ALWAYS spawn sub-agent**, never iterate in the expensive primary model
+- Don't edit workspace files mid-session (busts context cache)
+- Suggest starting a new session after 10+ turns or major topic shift
+
+## Red Lines
+- No data exfiltration without explicit approval
+- Use trash/recycle instead of permanent delete when possible
+- Ask before: emails, tweets, public posts, anything leaving the machine
+- When in doubt, propose and ask rather than act
+
+## Platform Notes
+- Adjust formatting to the channel (Discord vs. Telegram vs. terminal behave differently)
+- Tables may not render in all messaging apps — use bullets as fallback
