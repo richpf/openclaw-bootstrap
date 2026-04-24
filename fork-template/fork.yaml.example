@@ -1,0 +1,73 @@
+# fork.yaml.example — OpenClaw Fork Configuration Schema
+#
+# Copy this file to fork.yaml, fill in every field, then run:
+#   ./fork.sh fork.yaml [--out <dir>]
+#
+# Fields marked REQUIRED must be present or fork.sh will exit 1.
+# Fields marked OPTIONAL can be left blank; they'll render as-is in templates.
+
+# ─── OPERATOR ────────────────────────────────────────────────────────────────
+operator:
+  name: "Alex"               # REQUIRED. Human name of the operator (e.g. "Alex")
+  timezone: "US/Eastern"     # REQUIRED. Timezone string (e.g. "US/Pacific", "Europe/London")
+  channel: "telegram"        # REQUIRED. Primary chat channel: telegram|discord|slack|signal
+  background: |
+    Describe the operator's professional background here.
+    Multi-line YAML block is fine.
+  goals:
+    - "Financial independence"
+    - "Build automated income streams"
+    - "Healthier work-life balance"
+  first_session: "2026-01-01" # REQUIRED. Date of first session, YYYY-MM-DD
+
+# ─── ASSISTANT ───────────────────────────────────────────────────────────────
+assistant:
+  name: "Atlas"                           # REQUIRED. Persona name for the AI assistant
+  creature: "Persistent intelligence in a purpose-built shell" # REQUIRED. One-line vibe/descriptor
+  vibe: "Methodical, direct, gets things done. Not a corporate drone." # REQUIRED. Personality vibe line
+  emoji: "🗺️"                             # REQUIRED. Emoji avatar (single character preferred)
+  mission_oneliner: "Financial independence and a life less constrained." # REQUIRED. Mission statement
+
+# ─── INFRASTRUCTURE ──────────────────────────────────────────────────────────
+infra:
+  aws_region: "us-east-1"          # REQUIRED. AWS region for Lightsail instance
+  lightsail_plan: "medium_2_0"     # REQUIRED. Lightsail bundle ID (e.g. nano_2_0, micro_2_0, medium_2_0)
+  public_static_ip: ""             # Fill after provisioning. Static IP attached to Lightsail instance
+  tailscale_ip: ""                 # Fill after Tailscale setup. 100.x.x.x address of instance
+  domain: "example2.com"           # REQUIRED. Primary domain for this fork (e.g. myassistant.com)
+  certbot_email: "admin@example2.com" # REQUIRED. Email for Let's Encrypt cert registration
+  service_health_url: ""           # OPTIONAL. URL for custom service health check in HEARTBEAT.md
+
+# ─── GIT ─────────────────────────────────────────────────────────────────────
+git:
+  github_handle: "alex-oclaw"              # REQUIRED. GitHub username for this fork's repos
+  workspace_remote: "git@github.com:alex-oclaw/workspace.git"   # REQUIRED. Private workspace repo SSH URL
+  journal_remote: "git@github.com:alex-oclaw/journal.git"       # REQUIRED. Private journal repo SSH URL
+
+# ─── EMAIL ───────────────────────────────────────────────────────────────────
+email:
+  gmail_address: "myassistant@gmail.com"  # REQUIRED. Gmail account (with app password) for this fork
+                                           # Used for newsletter sending, notifications, etc.
+
+# ─── TELEGRAM ────────────────────────────────────────────────────────────────
+telegram:
+  bot_token_env: "TELEGRAM_BOT_TOKEN"     # REQUIRED. Name of the env var holding the bot token.
+                                           # The actual token must be in the fork's .env file (never committed).
+  operator_id: "123456789"                 # REQUIRED. Telegram user ID of the operator (numeric).
+                                           # Get it from @userinfobot on Telegram.
+
+# ─── BACKUP ──────────────────────────────────────────────────────────────────
+backup:
+  restic_b2_bucket: "myassistant-backup"  # REQUIRED. Backblaze B2 bucket name for Restic snapshots
+  restic_password_env: "RESTIC_PASSWORD"  # REQUIRED. Name of env var holding Restic encryption password
+
+# ─── LLM KEYS ────────────────────────────────────────────────────────────────
+llm_keys:
+  shared_from_parent: true   # If true, this fork shares the parent's LLM API keys (billing consolidated).
+                              # Set to false if this fork should have its own keys.
+  providers:
+    - anthropic               # Claude (Opus, Sonnet, Claude Code)
+    - openrouter              # Qwen, Minimax, and other models via OpenRouter
+    - openai                  # GPT-series, Whisper, DALL-E
+    - minimax                 # Minimax M1 (formatting, extraction)
+    - tavily                  # Web search API
