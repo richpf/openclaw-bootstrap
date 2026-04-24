@@ -1,0 +1,35 @@
+# fork.sample.yaml — sample fork config for dry-run and testing
+# Domain: example2.com  |  Slug: testop  |  Region: us-west-2
+
+infra:
+  aws_region: "us-west-2"
+  lightsail_plan: "medium_2_0"
+  domain: "example2.com"
+  certbot_email: "admin@example2.com"
+  tailscale_auth_key_env: "TAILSCALE_AUTH_KEY"
+  ssh_pubkey_path: "~/.ssh/id_ed25519.pub"
+  deployer_pubkey_path: ""
+  slug: "testop"
+
+git:
+  github_handle: "testop"
+  workspace_remote: "git@github.com:testop/workspace.git"
+  journal_remote: "git@github.com:testop/journal.git"
+
+email:
+  gmail_address: "testop-assistant@gmail.com"
+
+telegram:
+  bot_token_env: "TELEGRAM_BOT_TOKEN"
+  operator_id: ""
+
+backup:
+  restic_b2_bucket: "testop-backup"
+  restic_password_env: "RESTIC_PASSWORD"
+
+llm_keys:
+  shared_from_parent: true
+  providers:
+    - anthropic
+    - openrouter
+    - openai

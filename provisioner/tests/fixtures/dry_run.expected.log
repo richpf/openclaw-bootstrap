@@ -1,0 +1,191 @@
+19:49:26 [INFO] Loading fork.yaml: /home/openclaw/projects/openclaw-bootstrap/provisioner/tests/fixtures/fork.sample.yaml
+19:49:26 [INFO] ═══ DRY-RUN MODE — no AWS calls will be made ═══
+19:49:26 [INFO] Config: slug=testop  domain=example2.com  region=us-west-2  plan=medium_2_0
+19:49:26 [INFO]   [DRY-RUN] Pubkey not found at /home/openclaw/.ssh/id_ed25519.pub — using placeholder
+19:49:26 [INFO] Rendering cloud_init.yaml.j2 ...
+19:49:26 [INFO]   cloud-init rendered: 28318 bytes
+19:49:26 [INFO] ━━ Step A: Preflight checks
+19:49:26 [INFO] [DRY-RUN] sts.get_caller_identity() → validate AWS creds
+19:49:26 [INFO] [DRY-RUN] lightsail.get_regions({})
+19:49:26 [INFO] [DRY-RUN] lightsail.get_blueprints() → verify ubuntu_24_04 exists
+19:49:26 [INFO] [DRY-RUN] lightsail.get_bundles() → verify medium_2_0 exists
+19:49:26 [INFO]   Tailscale auth key: format OK (prefix=tskey-auth-, length=31)
+19:49:26 [INFO]   Operator pubkey: OK (ssh-ed25519 AAAAC3NzaC1lZDI1NT...)
+19:49:26 [INFO]   Preflight: ✓
+19:49:26 [INFO] ━━ Step B: SSH key pair → openclaw-testop
+19:49:26 [INFO] [DRY-RUN] lightsail.get_key_pair(keyPairName='openclaw-testop')
+19:49:26 [INFO] [DRY-RUN] lightsail.create_key_pair(keyPairName='openclaw-testop')
+19:49:26 [INFO] ━━ Step C: Launch instance → openclaw-testop
+19:49:26 [INFO] [DRY-RUN] lightsail.get_instance(instanceName='openclaw-testop') → idempotency check
+19:49:26 [INFO] [DRY-RUN] lightsail.create_instances(instanceNames=['openclaw-testop'], availabilityZone=us-west-2a, blueprintId='ubuntu_24_04', bundleId='medium_2_0', keyPairName='openclaw-testop', tags=[{"key": "Project", "value": "OpenClaw"}, {"key": "Fork", "value": "testop"}, {"key": "Parent", "value": "openclaw-orchestrator"}], userData=<cloud_init_yaml len=28318>)
+19:49:26 [INFO] ━━ Step D: Static IP → openclaw-testop-ip
+19:49:26 [INFO] [DRY-RUN] lightsail.get_static_ip(staticIpName='openclaw-testop-ip')
+19:49:26 [INFO] [DRY-RUN] lightsail.allocate_static_ip(staticIpName='openclaw-testop-ip')
+19:49:26 [INFO] [DRY-RUN] lightsail.attach_static_ip(staticIpName='openclaw-testop-ip', instanceName='openclaw-testop')
+19:49:26 [INFO] ━━ Step E: Firewall → initial
+19:49:26 [INFO] [DRY-RUN] lightsail.put_instance_public_ports({"portInfos": [{"fromPort": 22, "toPort": 22, "protocol": "tcp", "cidrs": ["0.0.0.0/0"]}, {"fromPort": 80, "toPort": 80, "protocol": "tcp", "cidrs": ["0.0.0.0/0"]}, {"fromPort": 443, "toPort": 443, "protocol": "tcp", "cidrs": ["0.0.0.0/0"]}], "instanceName": "openclaw-testop"})
+19:49:26 [INFO]   Firewall rules set: ['22/tcp', '80/tcp', '443/tcp']
+19:49:26 [INFO] ━━ Step F: DNS → SKIPPED (--skip-dns)
+19:49:26 [INFO] ━━ Step G: Wait for instance to reach running state
+19:49:26 [INFO] [DRY-RUN] lightsail.get_instance(instanceName='openclaw-testop') → poll until state=running
+19:49:26 [INFO] [DRY-RUN] socket.connect(203.0.113.100:22) → wait for SSH
+19:49:26 [INFO]   [DRY-RUN] Would poll for running state and SSH availability
+19:49:26 [INFO] ━━ Step H: Wait for cloud-init to complete
+19:49:26 [INFO] [DRY-RUN] paramiko.SSHClient.connect(203.0.113.100:22, username=ubuntu) → poll /var/lib/cloud/instance/boot-finished
+19:49:26 [INFO]   [DRY-RUN] Would poll for sentinel file /var/lib/cloud/instance/boot-finished
+19:49:26 [INFO] ━━ Step I: Retrieve Tailscale IP
+19:49:26 [INFO] [DRY-RUN] paramiko.SSHClient.connect(203.0.113.100:22) → run: tailscale ip -4
+19:49:26 [INFO]   [DRY-RUN] Tailscale IP: 100.64.1.100
+19:49:26 [INFO] ━━ Step J: Post-boot verification
+19:49:26 [INFO] [DRY-RUN] SSH verify: deployer_exists
+19:49:26 [INFO] [DRY-RUN] SSH verify: ssh_on_2222
+19:49:26 [INFO] [DRY-RUN] SSH verify: ssh_on_22_closed
+19:49:26 [INFO] [DRY-RUN] SSH verify: ufw_active
+19:49:26 [INFO] [DRY-RUN] SSH verify: ssh_socket_masked
+19:49:26 [INFO] [DRY-RUN] SSH verify: watchdog_cron_exists
+19:49:26 [INFO] ━━ Step K: Tighten Lightsail firewall (remove port 22)
+19:49:26 [INFO] ━━ Step E: Firewall → final (tightened)
+19:49:26 [INFO] [DRY-RUN] lightsail.put_instance_public_ports({"portInfos": [{"fromPort": 80, "toPort": 80, "protocol": "tcp", "cidrs": ["0.0.0.0/0"]}, {"fromPort": 443, "toPort": 443, "protocol": "tcp", "cidrs": ["0.0.0.0/0"]}], "instanceName": "openclaw-testop"})
+19:49:26 [INFO]   Firewall rules set: ['80/tcp', '443/tcp']
+19:49:26 [INFO]   🔒 Port 22 removed from Lightsail public firewall.
+   SSH remains accessible via Tailscale on port 2222.
+   Lightsail browser console (ubuntu user) remains as backup.
+19:49:26 [INFO] ━━ Step L: Save state file
+19:49:26 [INFO]   State written to: /home/openclaw/projects/openclaw-bootstrap/provisioner/state/testop.json
+19:49:26 [INFO] ━━ Step M: Provisioning complete
+
+────────────────────────────────────────────────────────────
+CLOUD-INIT USER DATA (would be uploaded to Lightsail):
+────────────────────────────────────────────────────────────
+#cloud-config
+# ============================================================
+# OpenClaw Lightsail Cloud-Init
+# Implements Sections 1–13 of the hardening runbook.
+# Generated for: testop  domain: example2.com
+#
+# SAFEGUARDS (lessons from prior lockout incident):
+#   1. ssh.socket is MASKED — survives package updates & reboots
+#   2. ubuntu account: password locked ONLY (passwd -l), NOT nologin
+#      — preserves Lightsail browser console emergency access
+#   3. SSH watchdog cron — auto-corrects port 2222 on every reboot
+# ============================================================
+
+users:
+  # Keep default ubuntu user intact (browser console recovery path)
+  - default
+
+  # deployer: human operator account
+  - name: deployer
+    groups: [sudo]
+    shell: /bin/bash
+    sudo: "ALL=(ALL:ALL) ALL"
+    ssh_authorized_keys:
+      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAA DRY-RUN-OPERATOR-KEY deployer@dryrun
+
+  # openclaw: service account (no login shell needed externally)
+  - name: openclaw
+    system: true
+    shell: /bin/bash
+    home: /home/openclaw
+    groups: []
+    no_user_group: false
+
+write_files:
+  # ── Section 3: SSH hardening config ──────────────────────────────
+  - path: /etc/ssh/sshd_config.d/hardening.conf
+    owner: root:root
+    permissions: "0644"
+    content: |
+      # OpenClaw SSH hardening — generated by provisioner
+      Port 2222
+      Protocol 2
+
+      PermitRootLogin no
+      PasswordAuthentication no
+      PubkeyAuthentication yes
+      AuthenticationMethods publickey
+      KbdInteractiveAuthentication no
+      ChallengeResponseAuthentication no
+      PermitEmptyPasswords no
+      MaxAuthTries 3
+      MaxSessions 3
+      LoginGraceTime 30
+
+      AllowUsers deployer
+      DenyUsers root ubuntu
+
+      AllowTcpForwarding no
+      X11Forwarding no
+      AllowAgentForwarding no
+      PermitTunnel no
+      GatewayPorts no
+
+      KexAlgorithms curve25519-sha256,curve25519-sha256@libssh.org,diffie-hellman-group16-sha512,diffie-hellman-group18-sha512
+      Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com
+      MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com
+
+      ClientAliveInterval 300
+      ClientAliveCountMax 2
+      TCPKeepAlive no
+
+      LogLevel VERBOSE
+      SyslogFacility AUTH
+
+      Banner /etc/ssh/banner
+      PrintMotd no
+      PrintLastLog yes
+
+      DebianBanner no
+      UseDNS no
+  ... (663 more lines) ...
+────────────────────────────────────────────────────────────
+
+
+============================================================
+  OpenClaw Lightsail Provisioner — DONE
+============================================================
+  Instance:      openclaw-testop
+  Static IP:     203.0.113.100
+  Tailscale IP:  100.64.1.100
+  Domain:        example2.com
+  Region:        us-west-2
+  Sections done: preflight, keypair, instance, static_ip, firewall_initial, boot_wait, cloud_init_wait, tailscale_ip, post_boot_verify, firewall_final, firewall_tightened
+  State file:    /home/openclaw/projects/openclaw-bootstrap/provisioner/state/testop.json
+
+  ── Next step ──────────────────────────────────────────
+  python3 install_openclaw.py state/testop.json
+
+  ── SSH access ─────────────────────────────────────────
+  ssh -p 2222 deployer@100.64.1.100
+  (public SSH port 22 removed — Tailscale required)
+============================================================
+
+
+════════════════════════════════════════════════════════════
+DRY-RUN SUMMARY — 23 planned API calls:
+════════════════════════════════════════════════════════════
+   1. sts.get_caller_identity() → validate AWS creds
+   2. lightsail.get_regions({})
+   3. lightsail.get_blueprints() → verify ubuntu_24_04 exists
+   4. lightsail.get_bundles() → verify medium_2_0 exists
+   5. lightsail.get_key_pair(keyPairName='openclaw-testop')
+   6. lightsail.create_key_pair(keyPairName='openclaw-testop')
+   7. lightsail.get_instance(instanceName='openclaw-testop') → idempotency check
+   8. lightsail.create_instances(instanceNames=['openclaw-testop'], availabilityZone=us-west-2a, blueprintId='ubuntu_24_04', bundleId='medium_2_0', keyPairName='openclaw-testop', tags=[{"key": "Project", "value": "OpenClaw"}, {"key": "Fork", "value": "testop"}, {"key": "Parent", "value": "openclaw-orchestrator"}], userData=<cloud_init_yaml len=28318>)
+   9. lightsail.get_static_ip(staticIpName='openclaw-testop-ip')
+  10. lightsail.allocate_static_ip(staticIpName='openclaw-testop-ip')
+  11. lightsail.attach_static_ip(staticIpName='openclaw-testop-ip', instanceName='openclaw-testop')
+  12. lightsail.put_instance_public_ports({"portInfos": [{"fromPort": 22, "toPort": 22, "protocol": "tcp", "cidrs": ["0.0.0.0/0"]}, {"fromPort": 80, "toPort": 80, "protocol": "tcp", "cidrs": ["0.0.0.0/0"]}, {"fromPort": 443, "toPort": 443, "protocol": "tcp", "cidrs": ["0.0.0.0/0"]}], "instanceName": "openclaw-testop"})
+  13. lightsail.get_instance(instanceName='openclaw-testop') → poll until state=running
+  14. socket.connect(203.0.113.100:22) → wait for SSH
+  15. paramiko.SSHClient.connect(203.0.113.100:22, username=ubuntu) → poll /var/lib/cloud/instance/boot-finished
+  16. paramiko.SSHClient.connect(203.0.113.100:22) → run: tailscale ip -4
+  17. SSH verify: deployer_exists
+  18. SSH verify: ssh_on_2222
+  19. SSH verify: ssh_on_22_closed
+  20. SSH verify: ufw_active
+  21. SSH verify: ssh_socket_masked
+  22. SSH verify: watchdog_cron_exists
+  23. lightsail.put_instance_public_ports({"portInfos": [{"fromPort": 80, "toPort": 80, "protocol": "tcp", "cidrs": ["0.0.0.0/0"]}, {"fromPort": 443, "toPort": 443, "protocol": "tcp", "cidrs": ["0.0.0.0/0"]}], "instanceName": "openclaw-testop"})
+════════════════════════════════════════════════════════════
+
