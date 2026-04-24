@@ -5,28 +5,11 @@
 #
 # Fields marked REQUIRED must be present or fork.sh will exit 1.
 # Fields marked OPTIONAL can be left blank; they'll render as-is in templates.
-
-# ─── OPERATOR ────────────────────────────────────────────────────────────────
-operator:
-  name: "Alex"               # REQUIRED. Human name of the operator (e.g. "Alex")
-  timezone: "US/Eastern"     # REQUIRED. Timezone string (e.g. "US/Pacific", "Europe/London")
-  channel: "telegram"        # REQUIRED. Primary chat channel: telegram|discord|slack|signal
-  background: |
-    Describe the operator's professional background here.
-    Multi-line YAML block is fine.
-  goals:
-    - "Financial independence"
-    - "Build automated income streams"
-    - "Healthier work-life balance"
-  first_session: "2026-01-01" # REQUIRED. Date of first session, YYYY-MM-DD
-
-# ─── ASSISTANT ───────────────────────────────────────────────────────────────
-assistant:
-  name: "Atlas"                           # REQUIRED. Persona name for the AI assistant
-  creature: "Persistent intelligence in a purpose-built shell" # REQUIRED. One-line vibe/descriptor
-  vibe: "Methodical, direct, gets things done. Not a corporate drone." # REQUIRED. Personality vibe line
-  emoji: "🗺️"                             # REQUIRED. Emoji avatar (single character preferred)
-  mission_oneliner: "Financial independence and a life less constrained." # REQUIRED. Mission statement
+#
+# NOTE: operator identity and assistant persona are NO LONGER required here.
+# The first-boot Telegram interview collects them from the new operator directly.
+# If you want to pre-seed these values (e.g. for automated testing or gifting
+# a pre-configured fork), add them under seed_from_yaml: below.
 
 # ─── INFRASTRUCTURE ──────────────────────────────────────────────────────────
 infra:
@@ -53,8 +36,9 @@ email:
 telegram:
   bot_token_env: "TELEGRAM_BOT_TOKEN"     # REQUIRED. Name of the env var holding the bot token.
                                            # The actual token must be in the fork's .env file (never committed).
-  operator_id: "123456789"                 # REQUIRED. Telegram user ID of the operator (numeric).
-                                           # Get it from @userinfobot on Telegram.
+  operator_id: ""                          # OPTIONAL pre-fill. If blank, auto-detected during first-boot
+                                           # interview from the operator's first Telegram message.
+                                           # (Get it from @userinfobot on Telegram if you want to pre-fill.)
 
 # ─── BACKUP ──────────────────────────────────────────────────────────────────
 backup:
@@ -71,3 +55,34 @@ llm_keys:
     - openai                  # GPT-series, Whisper, DALL-E
     - minimax                 # Minimax M1 (formatting, extraction)
     - tavily                  # Web search API
+
+# ─── SEED FROM YAML (optional) ───────────────────────────────────────────────
+#
+# If populated, these values are rendered into SOUL.md / USER.md / IDENTITY.md
+# at fork time, short-circuiting the corresponding first-boot interview questions.
+# Leave this block commented out (or empty) to let the interview collect them.
+#
+# Use cases:
+#   - Gifting a pre-configured fork to someone whose details you already know
+#   - Automated testing of the fork rendering pipeline
+#   - Re-deploying an existing operator's config to a fresh instance
+#
+# seed_from_yaml:
+#   operator:
+#     name: "Alex"
+#     timezone: "US/Eastern"
+#     channel: "telegram"
+#     background: |
+#       Describe the operator's professional background here.
+#     goals:
+#       - "Financial independence"
+#       - "Build automated income streams"
+#       - "Healthier work-life balance"
+#     first_session: "2026-01-01"
+#
+#   assistant:
+#     name: "Atlas"
+#     creature: "Persistent intelligence in a purpose-built shell"
+#     vibe: "Methodical, direct, gets things done. Not a corporate drone."
+#     emoji: "🗺️"
+#     mission_oneliner: "Financial independence and a life less constrained."

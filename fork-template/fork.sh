@@ -94,15 +94,8 @@ with open(sys.argv[1]) as f:
     cfg = yaml.safe_load(f)
 
 required = [
-    ("operator", "name"),
-    ("operator", "timezone"),
-    ("operator", "channel"),
-    ("operator", "first_session"),
-    ("assistant", "name"),
-    ("assistant", "creature"),
-    ("assistant", "vibe"),
-    ("assistant", "emoji"),
-    ("assistant", "mission_oneliner"),
+    # operator.* and assistant.* are now OPTIONAL — collected by first-boot
+    # interview if absent. Only infra/git/email/telegram/backup are required.
     ("infra", "aws_region"),
     ("infra", "lightsail_plan"),
     ("infra", "domain"),
@@ -112,7 +105,7 @@ required = [
     ("git", "journal_remote"),
     ("email", "gmail_address"),
     ("telegram", "bot_token_env"),
-    ("telegram", "operator_id"),
+    # telegram.operator_id is OPTIONAL -- auto-detected at first boot from Telegram message
     ("backup", "restic_b2_bucket"),
     ("backup", "restic_password_env"),
 ]
@@ -129,8 +122,19 @@ if missing:
         print(f"  - {m}", file=sys.stderr)
     sys.exit(1)
 
-# Produce operator slug: lowercase, spaces→hyphens, strip non-alnum-hyphen
-slug = re.sub(r'[^a-z0-9-]', '', cfg["operator"]["name"].lower().replace(" ", "-"))
+# Produce operator slug:
+# Prefer seed_from_yaml.operator.name, then operator.name, then domain, then "fork"
+seed = cfg.get("seed_from_yaml", {}) or {}
+op_name = (seed.get("operator", {}) or {}).get("name", "") or \
+          (cfg.get("operator", {}) or {}).get("name", "")
+if op_name:
+    slug = re.sub(r'[^a-z0-9-]', '', op_name.lower().replace(" ", "-"))
+else:
+    # Fall back to domain (e.g. "example2.com" -> "example2")
+    domain = (cfg.get("infra", {}) or {}).get("domain", "fork")
+    slug = re.sub(r'[^a-z0-9-]', '', domain.split(".")[0].lower())
+    if not slug:
+        slug = "fork"
 print(slug)
 PYEOF
 )
@@ -183,6 +187,13 @@ def flatten(d, prefix=""):
 flat = flatten(cfg)
 flat["operator_slug"] = slug
 
+# Merge seed_from_yaml into flat (operator.*/assistant.* overrides if present)
+# This allows fork.yaml to pre-seed persona values and short-circuit interview.
+if "seed_from_yaml" in cfg and isinstance(cfg["seed_from_yaml"], dict):
+    seed = flatten(cfg["seed_from_yaml"])
+    # Remap seed keys: seed_from_yaml.operator.name → operator_name
+    flat.update(seed)
+
 # Custom formatter: {{key}} substitution (tolerant of missing keys → leave as-is)
 class SafeDict(dict):
     def __missing__(self, key):
@@ -197,17 +208,17 @@ def render(text):
 
 # Walk the src template dir
 template_dir = src_dir  # templates live alongside fork.sh
-skip = {".git", "out", "__pycache__", "fork.sh", "fork.yaml.example",
-        "fork.yaml", "FORK_STRATEGY.md", "README.md", "render.py"}
-
-def should_skip(p: Path) -> bool:
-    return p.name in skip or p.suffix == ".py"
+# Top-level files/dirs to skip (only matched against first path component
+# so nested files like skills/fork-bootstrap/README.md are not affected)
+SKIP_TOPLEVEL = {".git", "out", "__pycache__", "fork.sh", "fork.yaml.example",
+                  "fork.yaml", "FORK_STRATEGY.md", "README.md", "render.py"}
 
 for src_file in sorted(template_dir.rglob("*")):
     if src_file.is_dir():
         continue
     rel = src_file.relative_to(template_dir)
-    if any(part in skip for part in rel.parts):
+    # Skip if the TOP-LEVEL component matches (preserves nested READMEs etc.)
+    if rel.parts[0] in SKIP_TOPLEVEL:
         continue
     if src_file.name.startswith(".git"):
         continue

@@ -79,17 +79,32 @@ without the complexity they haven't earned yet.
 
 ## Human Decision Points (Cannot Be Scripted)
 
-These must be answered by the person creating a fork — they are inherently human choices:
+These are the decisions required at **fork time** (before deployment). Note that
+operator identity and assistant persona are no longer collected here — they are
+collected by the first-boot interview at runtime.
 
-1. **Who is the operator?** Name, background, goals, timezone, channel preference.
-2. **What is the assistant's persona?** Name, vibe/creature description, emoji, mission statement.
-3. **What domain?** Must be registered before provisioning. DNS must be configured post-provision.
-4. **What Telegram bot?** Create a new bot via @BotFather. Get the token. Get the operator's Telegram ID.
-5. **What GitHub account?** Create private repos for workspace + journal. Set up SSH deploy keys.
-6. **What Gmail?** Create a new Gmail account for this fork. Generate an app password.
-7. **Shared or separate LLM keys?** Set `llm_keys.shared_from_parent` accordingly.
-8. **What Backblaze B2 bucket?** Create it, set up application keys.
-9. **What Lightsail plan?** Depends on operator's expected workload.
+### At Fork Time (fork.yaml required)
+1. **What domain?** Must be registered before provisioning. DNS must be configured post-provision.
+2. **What Telegram bot?** Create a new bot via @BotFather. Get the token.
+3. **What GitHub account?** Create private repos for workspace + journal. Set up SSH deploy keys.
+4. **What Gmail?** Create a new Gmail account for this fork. Generate an app password.
+5. **Shared or separate LLM keys?** Set `llm_keys.shared_from_parent` accordingly.
+6. **What Backblaze B2 bucket?** Create it, set up application keys.
+7. **What Lightsail plan?** Depends on operator's expected workload.
+
+### At First Boot (collected by Telegram interview)
+8. **Who is the operator?** Name, background, goals, timezone, channel preference.
+9. **What is the assistant's persona?** Name, vibe/creature description, emoji, mission statement.
+10. **External accounts?** GitHub handle (for task routing), outbound email, preferred domain.
+
+The first-boot interview (`skills/fork-bootstrap/`) replaces the need to pre-fill
+`USER.md`, `IDENTITY.md`, and `SOUL.md` at fork time. `fork.yaml` now only needs
+infra/accounts/keys — not persona or operator identity.
+
+If you want to pre-seed operator/persona values (e.g. for automated testing or
+gifting a pre-configured fork), use the optional `seed_from_yaml:` block in
+`fork.yaml`. Any field present there is rendered at fork time and skips the
+corresponding interview question on first boot.
 
 ---
 

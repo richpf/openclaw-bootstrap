@@ -20,7 +20,8 @@ chief-of-staff setup I have, without leaking my data."_
 # 1. Copy the example config
 cp fork-template/fork.yaml.example fork-template/fork.yaml
 
-# 2. Fill in every field (operator details, persona, infra, git, telegram, backup)
+# 2. Fill in infra/git/email/telegram/backup fields
+#    (operator identity + persona are collected at first boot — leave seed_from_yaml commented out)
 $EDITOR fork-template/fork.yaml
 
 # 3. Render the workspace
@@ -34,10 +35,40 @@ ls out/<operator-slug>-workspace/
 ```
 
 **What you get in `out/<slug>-workspace/`:**
-- All `*.tmpl` files rendered with your values (SOUL.md, USER.md, IDENTITY.md, MEMORY.md)
+- All `*.tmpl` files rendered with infra values (SOUL.md, USER.md, IDENTITY.md, MEMORY.md have persona `{{placeholders}}` still in them — filled by first-boot interview)
 - Static files copied as-is (AGENTS.md, TOOLS.md, HEARTBEAT.md, references/)
+- `skills/fork-bootstrap/` — the first-boot onboarding skill (see below)
 - `.env.example` listing every secret the fork needs
 - `NEXT_STEPS.md` explaining how to tar + upload to Lightsail
+
+---
+
+## First-Boot Flow
+
+When the operator powers on their new OpenClaw instance and sends the first
+Telegram message, the assistant detects that onboarding is not complete
+(persona files still contain `{{placeholders}}`) and starts the interview:
+
+```
+Operator → [first Telegram message]
+     ↓
+Assistant detects: .bootstrap-complete missing OR {{placeholders}} in persona files
+     ↓
+Assistant loads skills/fork-bootstrap/SKILL.md → interview.md
+     ↓
+~5 min Telegram interview (identity, persona, mission, comms, scope, accounts)
+     ↓
+All answers rendered into SOUL.md, USER.md, IDENTITY.md, MEMORY.md
+Sentinel created: ~/.openclaw/workspace/.bootstrap-complete
+First journal entry written
+     ↓
+Assistant: "Setup complete. Here's what I know about you — ready to begin?"
+     ↓
+Normal operation begins
+```
+
+See `skills/fork-bootstrap/README.md` for re-run instructions and the full
+sequence in `skills/fork-bootstrap/post_interview.md`.
 
 ---
 
@@ -89,11 +120,18 @@ fork-template/
 ├── .gitignore              ← Excludes out/, .env, logs, node_modules
 ├── AGENTS.md               ← Task router + model stack (verbatim, generic)
 ├── TOOLS.md                ← Local notes template (generic)
-├── HEARTBEAT.md            ← Health check routines (IPs parametrized)
-├── SOUL.md.tmpl            ← Assistant persona template
-├── USER.md.tmpl            ← Operator profile template
-├── IDENTITY.md.tmpl        ← Assistant identity template
-├── MEMORY.md.tmpl          ← Memory index template (generic lessons only)
-└── references/
-    └── TOOLS.md            ← Model stack reference (generic)
+├── HEARTBEAT.md.tmpl       ← Health check routines (IPs parametrized)
+├── SOUL.md.tmpl            ← Assistant persona template (placeholders filled by interview)
+├── USER.md.tmpl            ← Operator profile template (placeholders filled by interview)
+├── IDENTITY.md.tmpl        ← Assistant identity template (placeholders filled by interview)
+├── MEMORY.md.tmpl          ← Memory index template (infra placeholders only)
+├── references/
+│   └── TOOLS.md            ← Model stack reference (generic)
+└── skills/
+    └── fork-bootstrap/     ← First-boot onboarding interview skill
+        ├── SKILL.md        ← Trigger conditions + overview
+        ├── interview.md    ← Interview script (6 question groups)
+        ├── write_plan.md   ← Variable → file + placeholder mapping
+        ├── post_interview.md ← Post-interview rendering sequence
+        └── README.md       ← Human docs: trigger, disable, re-run
 ```
