@@ -1,0 +1,54 @@
+{"level": "INFO", "msg": "Starting installation for slug='test-acme'", "dry_run": true, "resume_from": null, "ts": "2026-04-24T20:00:46.641092+00:00"}
+{"level": "STEP", "event": "start", "step": "A_preflight", "msg": "Preflight checks", "ts": "2026-04-24T20:00:46.641142+00:00"}
+{"level": "STEP", "event": "end", "step": "A_preflight", "status": "dry_run", "elapsed_ms": 0, "msg": "\u2713 Dry-run: skipping real SSH check", "ts": "2026-04-24T20:00:46.641174+00:00"}
+{"level": "STEP", "event": "start", "step": "B_nodejs", "msg": "Install Node.js 22+", "ts": "2026-04-24T20:00:46.641193+00:00"}
+{"level": "STEP", "event": "end", "step": "B_nodejs", "status": "dry_run", "elapsed_ms": 0, "msg": "\u2713 Dry-run: would install Node.js 22", "ts": "2026-04-24T20:00:46.641212+00:00"}
+{"level": "STEP", "event": "start", "step": "C_openclaw_install", "msg": "Install OpenClaw globally", "ts": "2026-04-24T20:00:46.641227+00:00"}
+{"level": "STEP", "event": "end", "step": "C_openclaw_install", "status": "dry_run", "elapsed_ms": 0, "msg": "\u2713 Dry-run: would install openclaw@latest", "ts": "2026-04-24T20:00:46.641243+00:00"}
+{"level": "STEP", "event": "start", "step": "D_upload_bundle", "msg": "Upload workspace bundle", "ts": "2026-04-24T20:00:46.641259+00:00"}
+{"level": "STEP", "event": "end", "step": "D_upload_bundle", "status": "dry_run", "elapsed_ms": 0, "msg": "\u2713 Dry-run: would upload /tmp/tmpqkk6q39f \u2192 /home/openclaw/.openclaw/workspace", "ts": "2026-04-24T20:00:46.641276+00:00"}
+{"level": "STEP", "event": "start", "step": "E_onboard", "msg": "Onboard openclaw user", "ts": "2026-04-24T20:00:46.641291+00:00"}
+{"level": "STEP", "event": "end", "step": "E_onboard", "status": "dry_run", "elapsed_ms": 0, "msg": "\u2713 Dry-run: would run openclaw onboard + loginctl enable-linger", "ts": "2026-04-24T20:00:46.641306+00:00"}
+{"level": "STEP", "event": "start", "step": "F_secrets", "msg": "Collect and write API secrets", "ts": "2026-04-24T20:00:46.641320+00:00"}
+{"level": "STEP", "event": "end", "step": "F_secrets", "status": "dry_run", "elapsed_ms": 0, "msg": "\u2713 Dry-run: would prompt for API keys and write .env", "ts": "2026-04-24T20:00:46.641336+00:00"}
+{"level": "STEP", "event": "start", "step": "G_hardening", "msg": "Apply security hardening", "ts": "2026-04-24T20:00:46.641351+00:00"}
+{"level": "STEP", "event": "end", "step": "G_hardening", "status": "dry_run", "elapsed_ms": 0, "msg": "\u2713 Dry-run: would apply 20+ openclaw config hardening settings", "ts": "2026-04-24T20:00:46.641366+00:00"}
+{"level": "STEP", "event": "start", "step": "H_providers", "msg": "Configure API providers", "ts": "2026-04-24T20:00:46.641380+00:00"}
+{"level": "STEP", "event": "end", "step": "H_providers", "status": "dry_run", "elapsed_ms": 0, "msg": "\u2713 Dry-run: would configure provider entries in openclaw.json", "ts": "2026-04-24T20:00:46.641396+00:00"}
+{"level": "STEP", "event": "start", "step": "I_telegram", "msg": "Configure Telegram webhook", "ts": "2026-04-24T20:00:46.641409+00:00"}
+{"level": "STEP", "event": "end", "step": "I_telegram", "status": "dry_run", "elapsed_ms": 0, "msg": "\u2713 Dry-run: would configure Telegram channel and register webhook", "ts": "2026-04-24T20:00:46.641424+00:00"}
+{"level": "STEP", "event": "start", "step": "J_storage", "msg": "Initialize FAISS + SQLite", "ts": "2026-04-24T20:00:46.641439+00:00"}
+{"level": "STEP", "event": "end", "step": "J_storage", "status": "dry_run", "elapsed_ms": 0, "msg": "\u2713 Dry-run: would initialize FAISS index and SQLite schema", "ts": "2026-04-24T20:00:46.641454+00:00"}
+{"level": "STEP", "event": "start", "step": "K_audit", "msg": "Final security audit", "ts": "2026-04-24T20:00:46.641468+00:00"}
+{"level": "STEP", "event": "end", "step": "K_audit", "status": "dry_run", "elapsed_ms": 0, "msg": "\u2713 Dry-run: would run openclaw security audit --deep", "ts": "2026-04-24T20:00:46.641482+00:00"}
+{"level": "STEP", "event": "start", "step": "L_smoke_test", "msg": "Gateway smoke test", "ts": "2026-04-24T20:00:46.641496+00:00"}
+{"level": "STEP", "event": "end", "step": "L_smoke_test", "status": "dry_run", "elapsed_ms": 0, "msg": "\u2713 Dry-run: would send test prompt through gateway", "ts": "2026-04-24T20:00:46.641511+00:00"}
+{"level": "STEP", "event": "start", "step": "M_report", "msg": "Generate installation report", "ts": "2026-04-24T20:00:46.641533+00:00"}
+{"level": "STEP", "event": "end", "step": "M_report", "status": "dry_run", "elapsed_ms": 0, "msg": "\u2713 Dry-run: would generate installation report", "ts": "2026-04-24T20:00:46.641549+00:00"}
+{"level": "INFO", "msg": "Starting installation for slug='test-acme'", "dry_run": true, "resume_from": null, "ts": "2026-04-24T20:00:46.651196+00:00"}
+{"level": "STEP", "event": "start", "step": "A_preflight", "msg": "Preflight checks", "ts": "2026-04-24T20:00:46.651239+00:00"}
+{"level": "STEP", "event": "end", "step": "A_preflight", "status": "dry_run", "elapsed_ms": 0, "msg": "\u2713 Dry-run: skipping real SSH check", "ts": "2026-04-24T20:00:46.651269+00:00"}
+{"level": "STEP", "event": "start", "step": "B_nodejs", "msg": "Install Node.js 22+", "ts": "2026-04-24T20:00:46.651288+00:00"}
+{"level": "STEP", "event": "end", "step": "B_nodejs", "status": "dry_run", "elapsed_ms": 0, "msg": "\u2713 Dry-run: would install Node.js 22", "ts": "2026-04-24T20:00:46.651307+00:00"}
+{"level": "STEP", "event": "start", "step": "C_openclaw_install", "msg": "Install OpenClaw globally", "ts": "2026-04-24T20:00:46.651322+00:00"}
+{"level": "STEP", "event": "end", "step": "C_openclaw_install", "status": "dry_run", "elapsed_ms": 0, "msg": "\u2713 Dry-run: would install openclaw@latest", "ts": "2026-04-24T20:00:46.651353+00:00"}
+{"level": "STEP", "event": "start", "step": "D_upload_bundle", "msg": "Upload workspace bundle", "ts": "2026-04-24T20:00:46.651369+00:00"}
+{"level": "STEP", "event": "end", "step": "D_upload_bundle", "status": "dry_run", "elapsed_ms": 0, "msg": "\u2713 Dry-run: would upload /tmp/tmpjn5r8xg_/bundle \u2192 /home/openclaw/.openclaw/workspace", "ts": "2026-04-24T20:00:46.651385+00:00"}
+{"level": "STEP", "event": "start", "step": "E_onboard", "msg": "Onboard openclaw user", "ts": "2026-04-24T20:00:46.651400+00:00"}
+{"level": "STEP", "event": "end", "step": "E_onboard", "status": "dry_run", "elapsed_ms": 0, "msg": "\u2713 Dry-run: would run openclaw onboard + loginctl enable-linger", "ts": "2026-04-24T20:00:46.651416+00:00"}
+{"level": "STEP", "event": "start", "step": "F_secrets", "msg": "Collect and write API secrets", "ts": "2026-04-24T20:00:46.651430+00:00"}
+{"level": "STEP", "event": "end", "step": "F_secrets", "status": "dry_run", "elapsed_ms": 0, "msg": "\u2713 Dry-run: would prompt for API keys and write .env", "ts": "2026-04-24T20:00:46.651445+00:00"}
+{"level": "STEP", "event": "start", "step": "G_hardening", "msg": "Apply security hardening", "ts": "2026-04-24T20:00:46.651458+00:00"}
+{"level": "STEP", "event": "end", "step": "G_hardening", "status": "dry_run", "elapsed_ms": 0, "msg": "\u2713 Dry-run: would apply 20+ openclaw config hardening settings", "ts": "2026-04-24T20:00:46.651473+00:00"}
+{"level": "STEP", "event": "start", "step": "H_providers", "msg": "Configure API providers", "ts": "2026-04-24T20:00:46.651487+00:00"}
+{"level": "STEP", "event": "end", "step": "H_providers", "status": "dry_run", "elapsed_ms": 0, "msg": "\u2713 Dry-run: would configure provider entries in openclaw.json", "ts": "2026-04-24T20:00:46.651501+00:00"}
+{"level": "STEP", "event": "start", "step": "I_telegram", "msg": "Configure Telegram webhook", "ts": "2026-04-24T20:00:46.651515+00:00"}
+{"level": "STEP", "event": "end", "step": "I_telegram", "status": "dry_run", "elapsed_ms": 0, "msg": "\u2713 Dry-run: would configure Telegram channel and register webhook", "ts": "2026-04-24T20:00:46.651530+00:00"}
+{"level": "STEP", "event": "start", "step": "J_storage", "msg": "Initialize FAISS + SQLite", "ts": "2026-04-24T20:00:46.651543+00:00"}
+{"level": "STEP", "event": "end", "step": "J_storage", "status": "dry_run", "elapsed_ms": 0, "msg": "\u2713 Dry-run: would initialize FAISS index and SQLite schema", "ts": "2026-04-24T20:00:46.651557+00:00"}
+{"level": "STEP", "event": "start", "step": "K_audit", "msg": "Final security audit", "ts": "2026-04-24T20:00:46.651571+00:00"}
+{"level": "STEP", "event": "end", "step": "K_audit", "status": "dry_run", "elapsed_ms": 0, "msg": "\u2713 Dry-run: would run openclaw security audit --deep", "ts": "2026-04-24T20:00:46.651592+00:00"}
+{"level": "STEP", "event": "start", "step": "L_smoke_test", "msg": "Gateway smoke test", "ts": "2026-04-24T20:00:46.651606+00:00"}
+{"level": "STEP", "event": "end", "step": "L_smoke_test", "status": "dry_run", "elapsed_ms": 0, "msg": "\u2713 Dry-run: would send test prompt through gateway", "ts": "2026-04-24T20:00:46.651620+00:00"}
+{"level": "STEP", "event": "start", "step": "M_report", "msg": "Generate installation report", "ts": "2026-04-24T20:00:46.651634+00:00"}
+{"level": "STEP", "event": "end", "step": "M_report", "status": "dry_run", "elapsed_ms": 0, "msg": "\u2713 Dry-run: would generate installation report", "ts": "2026-04-24T20:00:46.651649+00:00"}

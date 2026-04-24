@@ -1,0 +1,11 @@
+{
+  "slug": "test-acme",
+  "tailscale_ip": "100.64.0.101",
+  "static_ip": "1.2.3.4",
+  "domain": "acme.example.com",
+  "ssh_user": "deployer",
+  "ssh_port": 2222,
+  "operator_telegram_id": 987654321,
+  "region": "us-east-1",
+  "lightsail_instance_name": "openclaw-test-acme"
+}
