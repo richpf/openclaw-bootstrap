@@ -1,0 +1,3 @@
+# State files contain IPs and fingerprints — do not commit
+*.json
+!.gitignore
