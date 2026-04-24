@@ -1,0 +1,29 @@
+# MEMORY.md — Curated Index
+
+## Active Projects
+<!-- Add projects here as work begins. Format:
+- **Project Name:** ~/projects/<name> — description. Status, key metrics, next step.
+-->
+_(none yet — onboarding in progress)_
+
+## Infrastructure
+- **GitHub:** {{git_github_handle}} | **Gmail:** {{email_gmail_address}} | **B2 Bucket:** {{backup_restic_b2_bucket}}
+- **Git sync:** every 6h | **Restic backup:** nightly 03:00 UTC | **Journal sync:** 15min
+- **Lightsail IP:** {{infra_public_static_ip}} | **Tailscale IP:** {{infra_tailscale_ip}}
+- **Domain:** {{infra_domain}}
+- **Workspace remote:** {{git_workspace_remote}}
+- **Journal remote:** {{git_journal_remote}}
+
+## Key Lessons (search memory/ for details)
+- **Real-time facts MUST be web-grounded, never from training data.** Any task touching current people/prices/spreads/econ data/events/policy/corporate actions — generators AND critics — must web_search against Reuters/Bloomberg/WSJ/FT/AP/official sources before asserting. Training data is stale by definition. Default verdict for unverifiable premises = `UNVERIFIED`, never `FALSE`.
+- **Document format: DOCX preferred over PDF.** Tables need explicit `columnWidths` in twips (9360 total) or Word/Docs collapses them. Script pattern at /tmp/md-to-docx.js. Use `docx` npm package.
+- `openclaw.json` `agents.defaults.models` is an ALLOWLIST — unlisted models silently downgrade to Opus.
+- **Cost: output tokens dominate.** Cache writes on context change. Avoid mid-session file edits (busts cache).
+- **Fly.io + asyncpg gotchas:** strip `sslmode` from URL, use `postgresql+asyncpg://` dialect, use `.internal` not `.flycast` hostname. `init_db()` on FastAPI startup should be try/except (don't block startup if DB is slow).
+- **Claude Code deployment debugging:** builds fast but needs 3-4 deployment fix iterations. Build on Lightsail → rsync to EC2 → restart on EC2.
+- **Qwen sub-agent timeout:** Qwen 3.5-397B sub-agents need **900s timeout** for research tasks (600s too short).
+- **Claude Code ACP agent has NO shell access** for `openclaw cron edit` or similar CLI — use `subagent` runtime (Sonnet) for tasks that need shell + CLI automation.
+
+## See Also
+- references/TOOLS.md — full model stack details
+- references/HEARTBEAT.md — periodic check routines

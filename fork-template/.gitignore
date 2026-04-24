@@ -1,0 +1,13 @@
+node_modules/
+.env
+.env.*
+!.env.example
+state/
+tmp/
+logs/
+memory/daily/
+out/
+/out/
+*.log
+*.swp
+.DS_Store
