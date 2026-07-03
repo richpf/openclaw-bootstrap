@@ -368,6 +368,10 @@ _Phase 2 (Lightsail provisioner) and Phase 3 (OpenClaw installer) will automate 
 NEXT
 echo "   written: NEXT_STEPS.md"
 
+# ─── Emit fork.yaml.used (copy for installer downstream) ──────────────────────
+cp "$YAML_FILE" "$OUT_DIR/fork.yaml.used"
+echo "   written: fork.yaml.used"
+
 # ─── Done ─────────────────────────────────────────────────────────────────────
 echo ""
 echo "✅ Fork workspace rendered successfully!"
